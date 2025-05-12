@@ -1,5 +1,5 @@
 # Étape de base avec Node
-FROM node:20-alpine
+FROM node:20-slim
 
 # Dossier de travail
 WORKDIR /app
@@ -8,7 +8,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Installation des dépendances
-RUN npm ci
+RUN npm install
 
 # Copie du reste de l’application
 COPY . .

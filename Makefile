@@ -41,63 +41,62 @@ wp:
 compose:
 	@if [ ! -f docker-compose.yml ]; then \
 		echo "📝 Génération de docker-compose.yml..."; \
-		cat > docker-compose.yml <<EOF \
-version: '3.9'
-
-services:
-  mariadb:
-    image: $(DB_IMAGE)
-    container_name: mariadb
-    environment:
-      MYSQL_DATABASE: $(DB_NAME)
-      MYSQL_USER: $(DB_USER)
-      MYSQL_PASSWORD: $(DB_PASSWORD)
-      MYSQL_ROOT_PASSWORD: $(DB_ROOT_PASSWORD)
-    volumes:
-      - db_data:/var/lib/mysql
-    networks:
-      - wpnet
-
-  wordpress:
-    image: $(WP_IMAGE)
-    container_name: wordpress
-    depends_on:
-      - mariadb
-    ports:
-      - "8000:80"
-    environment:
-      WORDPRESS_DB_HOST: mariadb
-      WORDPRESS_DB_NAME: $(DB_NAME)
-      WORDPRESS_DB_USER: $(DB_USER)
-      WORDPRESS_DB_PASSWORD: $(DB_PASSWORD)
-    volumes:
-      - ./$(WP_DIR):/var/www/html
-    networks:
-      - wpnet
-
-  astro:
-    container_name: astro
-    build:
-      context: ./$(ASTRO_DIR)
-      dockerfile: ../$(ASTRO_DOCKERFILE)
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./$(ASTRO_DIR):/app
-    command: ["npm", "run", "dev", "--", "--host"]
-    networks:
-      - wpnet
-
-volumes:
-  db_data:
-
-networks:
-  wpnet:
-    driver: bridge
-EOF \
-	; else \
+		echo "version: '3.9'" > docker-compose.yml; \
+		echo "" >> docker-compose.yml; \
+		echo "services:" >> docker-compose.yml; \
+		echo "  mariadb:" >> docker-compose.yml; \
+		echo "    image: $(DB_IMAGE)" >> docker-compose.yml; \
+		echo "    container_name: mariadb" >> docker-compose.yml; \
+		echo "    environment:" >> docker-compose.yml; \
+		echo "      MYSQL_DATABASE: $(DB_NAME)" >> docker-compose.yml; \
+		echo "      MYSQL_USER: $(DB_USER)" >> docker-compose.yml; \
+		echo "      MYSQL_PASSWORD: $(DB_PASSWORD)" >> docker-compose.yml; \
+		echo "      MYSQL_ROOT_PASSWORD: $(DB_ROOT_PASSWORD)" >> docker-compose.yml; \
+		echo "    volumes:" >> docker-compose.yml; \
+		echo "      - db_data:/var/lib/mysql" >> docker-compose.yml; \
+		echo "    networks:" >> docker-compose.yml; \
+		echo "      - wpnet" >> docker-compose.yml; \
+		echo "" >> docker-compose.yml; \
+		echo "  wordpress:" >> docker-compose.yml; \
+		echo "    image: $(WP_IMAGE)" >> docker-compose.yml; \
+		echo "    container_name: wordpress" >> docker-compose.yml; \
+		echo "    depends_on:" >> docker-compose.yml; \
+		echo "      - mariadb" >> docker-compose.yml; \
+		echo "    ports:" >> docker-compose.yml; \
+		echo "      - \"8000:80\"" >> docker-compose.yml; \
+		echo "    environment:" >> docker-compose.yml; \
+		echo "      WORDPRESS_DB_HOST: mariadb" >> docker-compose.yml; \
+		echo "      WORDPRESS_DB_NAME: $(DB_NAME)" >> docker-compose.yml; \
+		echo "      WORDPRESS_DB_USER: $(DB_USER)" >> docker-compose.yml; \
+		echo "      WORDPRESS_DB_PASSWORD: $(DB_PASSWORD)" >> docker-compose.yml; \
+		echo "    volumes:" >> docker-compose.yml; \
+		echo "      - ./$(WP_DIR):/var/www/html" >> docker-compose.yml; \
+		echo "    networks:" >> docker-compose.yml; \
+		echo "      - wpnet" >> docker-compose.yml; \
+		echo "" >> docker-compose.yml; \
+		echo "  astro:" >> docker-compose.yml; \
+		echo "    container_name: astro" >> docker-compose.yml; \
+		echo "    build:" >> docker-compose.yml; \
+		echo "      context: ./$(ASTRO_DIR)" >> docker-compose.yml; \
+		echo "      dockerfile: ../../$(ASTRO_DOCKERFILE)" >> docker-compose.yml; \
+		echo "    ports:" >> docker-compose.yml; \
+		echo "      - \"3000:4321\"" >> docker-compose.yml; \
+		echo "    volumes:" >> docker-compose.yml; \
+		echo "      - ./$(ASTRO_DIR):/app" >> docker-compose.yml; \
+		echo "    command: [\"npm\", \"run\", \"dev\", \"--\", \"--host\"]" >> docker-compose.yml; \
+		echo "    networks:" >> docker-compose.yml; \
+		echo "      - wpnet" >> docker-compose.yml; \
+		echo "" >> docker-compose.yml; \
+		echo "volumes:" >> docker-compose.yml; \
+		echo "  db_data:" >> docker-compose.yml; \
+		echo "" >> docker-compose.yml; \
+		echo "networks:" >> docker-compose.yml; \
+		echo "  wpnet:" >> docker-compose.yml; \
+		echo "    driver: bridge" >> docker-compose.yml; \
+	else \
 		echo "✅ docker-compose.yml déjà existant."; \
 	fi
+
 
 up:
 	docker-compose up -d --build
